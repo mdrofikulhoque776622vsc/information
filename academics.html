@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academics | APEX ACADEMY</title>
+    <style>
+        :root {
+            --primary: #0f172a;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --secondary: #0284c7;
+            --light-bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-heading: #0f172a;
+            --border: #e2e8f0;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* Header / Navbar */
+        header {
+            background-color: var(--primary);
+            color: #ffffff;
+            padding: 1.25rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .brand-logo {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .brand-text h1 {
+            font-size: 1.4rem;
+            letter-spacing: 0.5px;
+            color: #fff;
+        }
+
+        .brand-text p {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover, nav a.active {
+            color: #ffffff;
+        }
+
+        /* Compact Top Banner (Replaces Hero) */
+        .top-bar-banner {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+
+        .top-bar-banner h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .top-bar-banner p {
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Main Layout */
+        .container {
+            max-width: 1200px;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem;
+        }
+
+        section {
+            margin-bottom: 3.5rem;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .section-header h3 {
+            font-size: 1.6rem;
+            color: var(--text-heading);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-header h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Stream Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .card-header h4 {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 4px;
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .subject-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .subject-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .subject-list li::before {
+            content: '•';
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Table Styling */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: #f1f5f9;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f8fafc;
+        }
+
+        /* Download / Resource Links */
+        .resource-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--light-bg);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            border: 1px solid var(--border);
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+
+        .resource-link:hover {
+            transform: translateX(4px);
+            border-color: var(--accent);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: #94a3b8;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+            border-top: 1px solid #1e293b;
+        }
+
+        footer p {
+            color: #cbd5e1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Nav -->
+    <header>
+        <div class="brand">
+            <div class="brand-logo">A</div>
+            <div class="brand-text">
+                <h1>APEX ACADEMY</h1>
+                <p>Classes 5 to 12</p>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#class-levels" class="active">Class Levels</a></li>
+                <li><a href="#streams">Senior Streams</a></li>
+                <li><a href="#evaluation">Evaluation</a></li>
+                <li><a href="#resources">Resources</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Simple Top Banner -->
+    <div class="top-bar-banner">
+        <h2>Academic Portal</h2>
+        <p>Class structure, senior streams, examination schedules, and student resources.</p>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="container">
+
+        <!-- Class Divisions -->
+        <section id="class-levels">
+            <div class="section-header">
+                <h3>Class Offerings (5 to 12)</h3>
+            </div>
+
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Middle Wing</h4>
+                        <span class="badge">Classes 5–8</span>
+                    </div>
+                    <ul class="subject-list">
+                        <li>English, Vernacular / 2nd Language</li>
+                        <li>Mathematics & Mental Ability</li>
+                        <li>General Science (Physics, Chemistry, Bio)</li>
+                        <li>Social Studies & Environmental Science</li>
+                        <li>Computer Basics & Digital Skills</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Secondary Wing</h4>
+                        <span class="badge">Classes 9–10</span>
+                    </div>
+                    <ul class="subject-list">
+                        <li>English Language & Literature</li>
+                        <li>Mathematics (Standard / Basic)</li>
+                        <li>Science (Physics, Chemistry, Biology)</li>
+                        <li>Social Sciences & Economics</li>
+                        <li>Information Technology / AI</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Senior Secondary</h4>
+                        <span class="badge">Classes 11–12</span>
+                    </div>
+                    <ul class="subject-list">
+                        <li>Science Stream (PCM / PCB)</li>
+                        <li>Commerce Stream</li>
+                        <li>Humanities / Arts Stream</li>
+                        <li>Competitive Exam Preparation Tracks</li>
+                        <li>Lab Practicals & Research Projects</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Senior Secondary Streams Breakdown -->
+        <section id="streams">
+            <div class="section-header">
+                <h3>Senior Secondary Streams (Classes 11 & 12)</h3>
+            </div>
+
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Science Stream</h4>
+                        <span class="badge">STEM</span>
+                    </div>
+                    <ul class="subject-list">
+                        <li>Physics & Chemistry (Compulsory)</li>
+                        <li>Mathematics / Biology / Both</li>
+                        <li>Computer Science / IP</li>
+                        <li>English Core</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Commerce Stream</h4>
+                        <span class="badge">Business</span>
+                    </div>
+                    <ul class="subject-list">
+                        <li>Accountancy & Business Studies</li>
+                        <li>Economics</li>
+                        <li>Applied Mathematics / Informatics</li>
+                        <li>English Core</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Humanities Stream</h4>
+                        <span class="badge">Arts</span>
+                    </div>
+                    <ul class="subject-list">
+                        <li>Political Science & History</li>
+                        <li>Psychology / Sociology</li>
+                        <li>Economics / Geography</li>
+                        <li>English Core</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Evaluation & Exam System -->
+        <section id="evaluation">
+            <div class="section-header">
+                <h3>Examination & Assessment Schedule</h3>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Class Level</th>
+                            <th>Term 1 Assessment</th>
+                            <th>Term 2 Assessment</th>
+                            <th>Internal / Practicals</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Classes 5–8</strong></td>
+                            <td>Periodic Test 1 + Mid-Term</td>
+                            <td>Periodic Test 2 + Annual Exam</td>
+                            <td>Projects, Notebooks, Lab Activities</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Classes 9–10</strong></td>
+                            <td>Periodic Tests + Mid-Term</td>
+                            <td>Pre-Board Examination</td>
+                            <td>Practical, Portfolio, Viva</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Classes 11–12</strong></td>
+                            <td>Unit Tests + Mid-Term Practicals</td>
+                            <td>Pre-Board Mock Exams</td>
+                            <td>Lab Practicals, Project Work, Viva</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Downloads Center -->
+        <section id="resources">
+            <div class="section-header">
+                <h3>Downloads & Material</h3>
+            </div>
+
+            <div class="grid-2">
+                <div>
+                    <a href="#" class="resource-link">
+                        <span>📅 Annual Academic Calendar (Classes 5–12)</span>
+                        <span style="color: var(--accent);">PDF ↗</span>
+                    </a>
+                    <a href="#" class="resource-link">
+                        <span>📚 Class-wise Syllabus & Subject Codes</span>
+                        <span style="color: var(--accent);">PDF ↗</span>
+                    </a>
+                </div>
+                <div>
+                    <a href="#" class="resource-link">
+                        <span>⏱️ Examination & Test Time Tables</span>
+                        <span style="color: var(--accent);">PDF ↗</span>
+                    </a>
+                    <a href="#" class="resource-link">
+                        <span>📝 Previous Year Sample Papers</span>
+                        <span style="color: var(--accent);">Archive ↗</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 APEX ACADEMY. All Rights Reserved.</p>
+        <p style="margin-top: 0.25rem; font-size: 0.8rem;">Classes 5 through 12.</p>
+    </footer>
+
+</body>
+</html>
