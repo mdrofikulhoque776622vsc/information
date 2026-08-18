@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Academy | National Premier Educational Institution (Classes 5–12)</title>
+    
+    <style>
+        /* =========================================================
+           1. SYSTEM TOKENS & DESIGN ENGINE
+           ========================================================= */
+        :root {
+            --brand-navy: #002147;
+            --brand-dark-navy: #001229;
+            --brand-gold: #D4AF37;
+            --brand-accent-red: #8B0000;
+            --bg-body: #f4f6f9;
+            --bg-surface: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #555555;
+            --border-color: #dcdcdc;
+            --max-width: 1400px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* =========================================================
+           2. UTILITY TOOLBAR & TICKER
+           ========================================================= */
+        .utility-header {
+            background-color: var(--brand-dark-navy);
+            color: #ffffff;
+            font-size: 0.78rem;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .utility-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .utility-links {
+            display: flex;
+            gap: 15px;
+            list-style: none;
+        }
+
+        .utility-links a {
+            color: rgba(255,255,255,0.85);
+        }
+
+        .ticker-wrap {
+            background: var(--brand-accent-red);
+            color: white;
+            font-size: 0.82rem;
+            padding: 8px 0;
+            font-weight: 600;
+        }
+
+        .ticker-inner {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .ticker-badge {
+            background: var(--brand-gold);
+            color: black;
+            padding: 2px 8px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        /* =========================================================
+           3. BRANDING HEADER & ADVANCED NAVIGATION
+           ========================================================= */
+        .main-header {
+            background: var(--bg-surface);
+            padding: 18px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-identity {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand-logo {
+            width: 60px;
+            height: 60px;
+            background: var(--brand-navy);
+            color: var(--brand-gold);
+            border: 3px solid var(--brand-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            font-weight: 900;
+        }
+
+        .brand-text h1 {
+            font-size: 1.7rem;
+            color: var(--brand-navy);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+        }
+
+        .brand-text p {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* Nav Engine */
+        .navbar {
+            background: var(--brand-navy);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-item > a {
+            display: block;
+            padding: 14px 18px;
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-right: 1px solid rgba(255,255,255,0.08);
+            transition: background 0.2s;
+        }
+
+        .nav-item:hover > a {
+            background: var(--brand-gold);
+            color: black;
+            text-decoration: none;
+        }
+
+        /* Submenu Dropdowns */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--bg-surface);
+            min-width: 250px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            list-style: none;
+            border-top: 3px solid var(--brand-gold);
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 16px;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dropdown-menu a:hover {
+            background: var(--bg-body);
+            color: var(--brand-navy);
+            font-weight: 700;
+        }
+
+        .nav-item:hover .dropdown-menu {
+            display: block;
+        }
+
+        /* =========================================================
+           4. HERO SPOTLIGHT & AUTOMATIC SLIDER WITH ARROWS
+           ========================================================= */
+        .hero-banner {
+            background: linear-gradient(rgba(0,33,71,0.85), rgba(0,18,41,0.9)), 
+                        radial-gradient(circle, var(--brand-navy), #000);
+            color: white;
+            padding: 50px 0;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 2.3fr 1fr;
+            gap: 30px;
+        }
+
+        .hero-text h2 {
+            font-size: 2.6rem;
+            line-height: 1.2;
+            margin-bottom: 15px;
+        }
+
+        .hero-text h2 span {
+            color: var(--brand-gold);
+        }
+
+        .hero-text p {
+            font-size: 1.05rem;
+            opacity: 0.9;
+            margin-bottom: 25px;
+            max-width: 850px;
+        }
+
+        .hero-btn-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .btn-gold {
+            background: var(--brand-gold);
+            color: black;
+            padding: 12px 24px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-outline {
+            border: 2px solid white;
+            color: white;
+            padding: 10px 22px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        /* --- Image Slider Styles --- */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            overflow: hidden;
+            border: 4px solid var(--brand-gold);
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* --- Navigation Buttons (Arrows) --- */
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.4);
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+            user-select: none;
+        }
+
+        .slider-btn:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .prev-btn {
+            left: 15px;
+        }
+
+        .next-btn {
+            right: 15px;
+        }
+
+        .quick-portal-card {
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            padding: 24px;
+            border-top: 4px solid var(--brand-gold);
+        }
+
+        .quick-portal-card h3 {
+            color: var(--brand-navy);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--brand-navy);
+            padding-bottom: 6px;
+        }
+
+        .portal-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .portal-list a {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--brand-navy);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* =========================================================
+           5. INSTITUTIONAL METRICS STRIP
+           ========================================================= */
+        .metrics-strip {
+            background: var(--brand-dark-navy);
+            color: white;
+            padding: 30px 0;
+            border-bottom: 4px solid var(--brand-gold);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            text-align: center;
+        }
+
+        .metric-item h3 {
+            font-size: 2.2rem;
+            color: var(--brand-gold);
+            font-weight: 900;
+        }
+
+        .metric-item p {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.85;
+        }
+
+        /* =========================================================
+           6. TRIPLE-COLUMN HUB (NEWS, NOTICES, EVENTS)
+           ========================================================= */
+        .content-section {
+            padding: 50px 0;
+        }
+
+        .triple-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .hub-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-top: 3px solid var(--brand-navy);
+        }
+
+        .hub-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .hub-header h3 {
+            font-size: 1.05rem;
+            color: var(--brand-navy);
+            text-transform: uppercase;
+        }
+
+        .hub-header a {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--brand-accent-red);
+        }
+
+        .feed-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .feed-item {
+            font-size: 0.88rem;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .feed-date {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 700;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        /* =========================================================
+           7. ACADEMIC WINGS & CURRICULUM SECTORS
+           ========================================================= */
+        .section-header-bar {
+            background: var(--brand-navy);
+            color: white;
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .quad-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .academic-box {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            padding: 22px;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .academic-box:hover {
+            border-color: var(--brand-navy);
+            transform: translateY(-3px);
+        }
+
+        .academic-box h4 {
+            color: var(--brand-navy);
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .academic-box p {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* =========================================================
+           8. RESEARCH & INNOVATION CENTERS
+           ========================================================= */
+        .research-strip {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .research-strip h3 {
+            font-size: 1.8rem;
+            color: var(--brand-navy);
+            margin-bottom: 10px;
+        }
+
+        .research-strip p {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            margin-bottom: 15px;
+        }
+
+        /* =========================================================
+           9. INSTITUTIONAL FOOTER
+           ========================================================= */
+        footer {
+            background: var(--brand-dark-navy);
+            color: white;
+            padding: 60px 0 20px 0;
+            margin-top: 60px;
+            border-top: 5px solid var(--brand-gold);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2.2fr repeat(4, 1fr);
+            gap: 30px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-col h4 {
+            color: var(--brand-gold);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.82rem;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.75);
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        /* =========================================================
+           10. MEDIA QUERIES & RESPONSIVENESS
+           ========================================================= */
+        @media screen and (max-width: 1200px) {
+            .quad-grid { grid-template-columns: 1fr 1fr; }
+            .metrics-grid { grid-template-columns: repeat(3, 1fr); }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media screen and (max-width: 900px) {
+            .hero-grid, .triple-grid, .research-strip { grid-template-columns: 1fr; }
+            .nav-menu { flex-wrap: wrap; }
+            .header-flex { flex-direction: column; text-align: center; gap: 15px; }
+            .metrics-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media screen and (max-width: 600px) {
+            .quad-grid, .metrics-grid { grid-template-columns: 1fr; }
+            .utility-flex { flex-direction: column; gap: 5px; }
+            .footer-grid { grid-template-columns: 1fr; }
+        }
+
+        @media print {
+            .utility-header, .ticker-wrap, .navbar, footer { display: none !important; }
+            body { background: white; color: black; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Utility Header Bar -->
+    <div class="utility-header">
+        <div class="container utility-flex">
+            <div>Official Portal of Apex Academy Itahar | CBSE Affiliated Autonomous Center</div>
+            <ul class="utility-links">
+                <li><a href="#">ERP Student Login</a></li>
+                <li><a href="#">Staff Portal</a></li>
+                <li><a href="#">Webmail</a></li>
+                <li><a href="#">Library Portal</a></li>
+                <li><a href="#">RTI Disclosures</a></li>
+                <li><a href="#">A-Z Index</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Live Announcement Ticker -->
+    <div class="ticker-wrap">
+        <div class="container ticker-inner">
+            <span class="ticker-badge">ANNOUNCEMENT</span>
+            <marquee behavior="scroll" direction="left" scrollamount="6">
+                AAEE Phase-I Admissions open for Classes 5 to 11. | Board Examination schedule released. | National Science Olympiad registrations open at the STEM Cell.
+            </marquee>
+        </div>
+    </div>
+
+    <!-- Main Branding Header -->
+    <header class="main-header">
+        <div class="container header-flex">
+            <div class="brand-identity">
+                <div class="brand-logo">AA</div>
+                <div class="brand-text">
+                    <h1> Itahar Apex Academy </h1>
+                    <p>Premier Secondary & Senior Secondary Educational Institution</p>
+                </div>
+            </div>
+            <div style="text-align: right; font-size: 0.82rem; color: var(--text-secondary);">
+                <strong>NIRF Academic Rank: #1 (School Category)</strong><br>
+                Affiliation No: 1100492 | School Code: 89012
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#">About Us</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Vision & Mission</a></li>
+                        <li><a href="#">Leadership & Senate</a></li>
+                        <li><a href="#">History & Heritage</a></li>
+                        <li><a href="#">Campus Master Plan</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#">Academics</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Middle Wing (Classes 5–8)</a></li>
+                        <li><a href="#">Secondary Wing (Classes 9–10)</a></li>
+                        <li><a href="#">Senior Sec - Science</a></li>
+                        <li><a href="#">Senior Sec - Commerce</a></li>
+                        <li><a href="#">Senior Sec - Humanities</a></li>
+                        <li><a href="#">Curriculum Framework</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#">Admissions</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">AAEE Entrance Test</a></li>
+                        <li><a href="#">Eligibility Criteria</a></li>
+                        <li><a href="#">Fee Structure & Grants</a></li>
+                        <li><a href="#">Boarding Admissions</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#">Research & STEM</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">AI & Robotics Lab</a></li>
+                        <li><a href="#">Atal Tinkering Lab</a></li>
+                        <li><a href="#">Olympiad Training Cell</a></li>
+                        <li><a href="#">Student Journals</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a href="#">Examinations</a></li>
+                <li class="nav-item"><a href="#">Campus Life</a></li>
+                <li class="nav-item"><a href="#">Placements & JEE/NEET Cell</a></li>
+                <li class="nav-item"><a href="#">Contact Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Spotlight Section -->
+    <section class="hero-banner">
+        <div class="container hero-grid">
+            <div class="hero-text">
+                <h2>Excellence in <span>Academic Leadership & Scientific Discovery</span></h2>
+                <p>Nurturing future scientists, engineers, leaders, and thinkers from Classes 5 through 12 with state-of-the-art facilities, PhD faculty, and competitive examination coaching.</p>
+                <div class="hero-btn-group">
+                    <button class="btn-gold">ADMISSIONS PORTAL</button>
+                    <button class="btn-outline">EXPLORE CAMPUS</button>
+                </div>
+
+                <!-- Automated & Interactive Image Carousel -->
+                <div class="slider-container">
+                    <div class="slide active"><img src="1.png" alt="Faculty Group Photo"></div>
+                    <div class="slide"><img src="2.png" alt="School Buses & Campus Building"></div>
+                    <div class="slide"><img src="3.png" alt="Aerial View of Student Assembly"></div>
+                    <div class="slide"><img src="4.png" alt="Students Basketball Court"></div>
+                    <div class="slide"><img src="5.png" alt="Girls Group Photo"></div>
+
+                    <!-- Skip Buttons / Controls -->
+                    <button class="slider-btn prev-btn" onclick="changeSlide(-1)" aria-label="Previous Slide">&#10094;</button>
+                    <button class="slider-btn next-btn" onclick="changeSlide(1)" aria-label="Next Slide">&#10095;</button>
+                </div>
+            </div>
+
+            <!-- Quick Access Card -->
+            <div class="quick-portal-card">
+                <h3>INSTITUTION PORTALS</h3>
+                <ul class="portal-list">
+                    <li><a href="#"><span>▸ Student ERP System</span> <span>&rarr;</span></a></li>
+                    <li><a href="#"><span>▸ Parent Dashboard</span> <span>&rarr;</span></a></li>
+                    <li><a href="#"><span>▸ Faculty Webmail</span> <span>&rarr;</span></a></li>
+                    <li><a href="#"><span>▸ Entrance Test (AAEE)</span> <span>&rarr;</span></a></li>
+                    <li><a href="#"><span>▸ Central E-Library</span> <span>&rarr;</span></a></li>
+                    <li><a href="#"><span>▸ CBSE Board Exam Cell</span> <span>&rarr;</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics Strip -->
+    <div class="metrics-strip">
+        <div class="container metrics-grid">
+            <div class="metric-item">
+                <h3>100%</h3>
+                <p>CBSE Pass Rate</p>
+            </div>
+            <div class="metric-item">
+                <h3>2,800+</h3>
+                <p>Enrolled Students</p>
+            </div>
+            <div class="metric-item">
+                <h3>1:12</h3>
+                <p>Teacher-Student Ratio</p>
+            </div>
+            <div class="metric-item">
+                <h3>150+</h3>
+                <p>JEE/NEET Ranks Top 1000</p>
+            </div>
+            <div class="metric-item">
+                <h3>50 Acre</h3>
+                <p>Green Campus</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Hub (3 Columns) -->
+    <div class="container content-section">
+        <div class="triple-grid">
+            
+            <!-- Column 1: News -->
+            <div class="hub-card">
+                <div class="hub-header">
+                    <h3>Latest News</h3>
+                    <a href="#">ARCHIVE &rarr;</a>
+                </div>
+                <ul class="feed-list">
+                    <li class="feed-item">
+                        <span class="feed-date">AUGUST 15</span>
+                        <a href="#">Apex Academy Secures Rank #1 in National School Rankings for STEM Education.</a>
+                    </li>
+                    <li class="feed-item">
+                        <span class="feed-date">AUGUST 02</span>
+                        <a href="#">Class 12 Students Win Gold at International Mathematical Olympiad.</a>
+                    </li>
+                    <li class="feed-item">
+                        <span class="feed-date">JULY 22</span>
+                        <a href="#">MoU Signed with IIT Delhi for Advanced Robotics Mentorship Program.</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Column 2: Notices -->
+            <div class="hub-card">
+                <div class="hub-header">
+                    <h3>Official Notices</h3>
+                    <a href="#">VIEW ALL &rarr;</a>
+                </div>
+                <ul class="feed-list">
+                    <li class="feed-item">
+                        <span class="feed-date">AUGUST 18</span>
+                        <a href="#">Schedule for Mid-Term Examinations (Classes 5–12) Released.</a>
+                    </li>
+                    <li class="feed-item">
+                        <span class="feed-date">AUGUST 10</span>
+                        <a href="#">Mandatory Circular regarding CBSE Board Verification for Class 10 & 12.</a>
+                    </li>
+                    <li class="feed-item">
+                        <span class="feed-date">AUGUST 04</span>
+                        <a href="#">Tender Notification: Procurement of Physics Lab Equipment.</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Column 3: Events -->
+            <div class="hub-card">
+                <div class="hub-header">
+                    <h3>Upcoming Events</h3>
+                    <a href="#">CALENDAR &rarr;</a>
+                </div>
+                <ul class="feed-list">
+                    <li class="feed-item">
+                        <span class="feed-date">SEPTEMBER 05</span>
+                        <a href="#">Teachers' Day National Academic Symposium & Awards.</a>
+                    </li>
+                    <li class="feed-item">
+                        <span class="feed-date">SEPTEMBER 15</span>
+                        <a href="#">Annual Inter-School Hackathon & AI Showcase (Apex Innovate).</a>
+                    </li>
+                    <li class="feed-item">
+                        <span class="feed-date">OCTOBER 02</span>
+                        <a href="#">National Track & Field Sports Meet Inauguration.</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Academic Wings Grid -->
+    <div class="container">
+        <div class="section-header-bar">
+            <span>Academic Wings & Specializations</span>
+            <span style="font-size: 0.85rem; font-weight: 400;">CLASSES 5 THROUGH 12</span>
+        </div>
+
+        <div class="quad-grid">
+            <div class="academic-box">
+                <h4>Middle School Wing (5–8)</h4>
+                <p>Focuses on foundational logical reasoning, language skills, digital literacy, and experiential science labs.</p>
+            </div>
+            <div class="academic-box">
+                <h4>Secondary Wing (9–10)</h4>
+                <p>Rigorous preparation for CBSE Board Exams alongside Olympiad coaching and advanced practical learning.</p>
+            </div>
+            <div class="academic-box">
+                <h4>Senior Secondary: Science</h4>
+                <p>PCM/PCB tracks integrated with JEE Main/Advanced, NEET, and CUET coaching with research faculty.</p>
+            </div>
+            <div class="academic-box">
+                <h4>Senior Secondary: Commerce & Humanities</h4>
+                <p>Accountancy, Micro-Economics, Political Science, and Data Analytics programs for future domain leaders.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Research & Innovation Center Banner -->
+    <div class="container">
+        <div class="research-strip">
+            <div>
+                <h3>Atal Tinkering & AI Robotics Center</h3>
+                <p>Equipped with 3D printers, IoT workstations, and GPU computing nodes for student research projects.</p>
+                <button class="btn-gold">RESEARCH PORTAL</button>
+            </div>
+            <div style="background: var(--bg-body); height: 160px; border: 1px dashed var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-weight: 700;">
+                [ High-Performance Computing & Robotics Facility Display ]
+            </div>
+        </div>
+    </div>
+
+    <!-- Institutional Footer -->
+    <footer>
+        <div class="container footer-grid">
+            <div>
+                <h4 style="color: white; font-size: 1.1rem; margin-bottom: 10px;">APEX ACADEMY DELHI</h4>
+                <p style="font-size: 0.85rem; color: rgba(255,255,255,0.7); line-height: 1.6; margin-bottom: 15px;">
+                    Apex Academy is an autonomous national educational institute dedicated to scholastic excellence, character building, and innovative education from Classes 5 to 12.
+                </p>
+                <p style="font-size: 0.8rem; color: var(--brand-gold);">
+                    📍 Hauz Khas Institutional Area, New Delhi - 110016
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Academics</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Middle Wing (5–8)</a></li>
+                    <li><a href="#">Secondary (9–10)</a></li>
+                    <li><a href="#">Senior Sec Science</a></li>
+                    <li><a href="#">Commerce Stream</a></li>
+                    <li><a href="#">Humanities Stream</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Admissions</h4>
+                <ul class="footer-links">
+                    <li><a href="#">AAEE Examination</a></li>
+                    <li><a href="#">Fee Structure</a></li>
+                    <li><a href="#">Scholarship Schemes</a></li>
+                    <li><a href="#">Boarding House</a></li>
+                    <li><a href="#">Transfer Rules</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Portals</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Student ERP Login</a></li>
+                    <li><a href="#">Parent Dashboard</a></li>
+                    <li><a href="#">Alumni Network</a></li>
+                    <li><a href="#">Fee Payment Portal</a></li>
+                    <li><a href="#">Library Portal</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Contact & Help</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Admissions Cell</a></li>
+                    <li><a href="#">Transport Helpdesk</a></li>
+                    <li><a href="#">Medical Center</a></li>
+                    <li><a href="#">Security Desk</a></li>
+                    <li><a href="#">CBSE Cell</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="container" style="padding-top: 20px; font-size: 0.8rem; color: rgba(255,255,255,0.5); display: flex; justify-content: space-between;">
+            <p>&copy; Apex Academy Delhi. All Rights Reserved.</p>
+            <p>Institutional Web Standards Architecture v4.2</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Automatic & Manual Image Slider Controls -->
+    <script>
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        let autoSlideInterval = setInterval(autoRotateSlides, 3000);
+
+        function showSlide(index) {
+            slides[currentSlideIndex].classList.remove('active');
+            currentSlideIndex = (index + slides.length) % slides.length;
+            slides[currentSlideIndex].classList.add('active');
+        }
+
+        function autoRotateSlides() {
+            showSlide(currentSlideIndex + 1);
+        }
+
+        function changeSlide(direction) {
+            // Reset the auto-timer when user manually clicks so it doesn't skip immediately
+            clearInterval(autoSlideInterval);
+            showSlide(currentSlideIndex + direction);
+            autoSlideInterval = setInterval(autoRotateSlides, 3000);
+        }
+    </script>
+
+</body>
+</html>
