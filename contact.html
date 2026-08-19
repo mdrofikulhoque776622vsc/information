@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - Apex Academy</title>
     <style>
-        /* =========================================================
-           1. RESET & CSS VARIABLES
-           ========================================================= */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -29,22 +26,17 @@
             line-height: 1.6;
         }
 
-        /* 2. ::selection pseudo-element */
         ::selection {
             background-color: var(--primary-blue);
             color: #ffffff;
         }
 
-        /* =========================================================
-           3. GROUPED SELECTOR
-           ========================================================= */
         .top-bar, header, .container, footer {
             width: 100%;
             margin-left: auto;
             margin-right: auto;
         }
 
-        /* Top Header Bar */
         .top-bar {
             background-color: var(--primary-blue);
             color: #ffffff;
@@ -61,7 +53,6 @@
             margin-left: 15px;
         }
 
-        /* Header Navigation */
         header {
             background: #ffffff;
             padding: 20px 5%;
@@ -88,7 +79,6 @@
             font-weight: 600;
         }
 
-        /* Hero Banner */
         .page-banner {
             background: linear-gradient(rgba(15, 76, 129, 0.8), rgba(15, 76, 129, 0.8)), 
                         url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1200') center/cover;
@@ -97,15 +87,11 @@
             text-align: center;
         }
 
-        /* =========================================================
-           4. ::first-letter PSEUDO-ELEMENT
-           ========================================================= */
         .page-banner h1::first-letter {
             font-size: 50px;
             color: var(--accent-orange);
         }
 
-        /* Main Content Container */
         .container {
             max-width: 1200px;
             padding: 40px 20px;
@@ -129,7 +115,6 @@
             padding-bottom: 5px;
         }
 
-        /* Contact Details Styling */
         .contact-info {
             list-style: none;
             margin-bottom: 25px;
@@ -140,9 +125,6 @@
             border-bottom: 1px solid var(--border-color);
         }
 
-        /* =========================================================
-           5. PSEUDO-CLASSES (:nth-child, :first-child, :nth-last-child)
-           ========================================================= */
         .contact-info li:first-child {
             font-weight: bold;
             color: var(--primary-blue);
@@ -161,9 +143,6 @@
             margin-right: 8px;
         }
 
-        /* =========================================================
-           6. UNIVERSAL & ATTRIBUTE SELECTORS
-           ========================================================= */
         .form-group * {
             display: block;
             width: 100%;
@@ -225,7 +204,14 @@
             background-color: #d95e14;
         }
 
-        /* Footer */
+        #form-response-message {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 16px;
+            color: #16a34a;
+            display: none;
+        }
+
         footer {
             background-color: #1e293b;
             color: white;
@@ -256,7 +242,7 @@
     <header>
         <div class="logo">APEX <span>ACADEMY</span></div>
         <nav>
-            <a href="index.html">Home</a>
+            <a href="#">Home</a>
             <a href="#">About</a>
             <a href="#">Academic</a>
             <a href="#">Facilities</a>
@@ -273,7 +259,7 @@
     <!-- Main Content Body -->
     <div class="container">
         
-        <!-- Left Side: Campus & City Office Address Details -->
+        <!-- Left Side Address Details -->
         <div class="card">
             <h2>Our Location</h2>
             
@@ -296,14 +282,14 @@
             </ul>
         </div>
 
-        <!-- Right Side: Get In Touch Inquiry Form -->
+        <!-- Right Side Inquiry Form -->
         <div class="card">
             <h2>Get in Touch</h2>
             <p style="margin-bottom: 20px; font-size: 14px; color: #64748b;">
                 Please use this enquiry form to ask any questions and send a message about courses at Apex Academy. One of our Student Advisers will get back to you as soon as possible.
             </p>
 
-            <form action="https://formsubmit.co/mdrofikulhoque776622@gmail.com" method="POST">
+            <form id="inquiry-form">
                 <div class="form-group">
                     <label class="required-label">Your Name</label>
                     <input type="text" name="Student Name" placeholder="Enter your full name" required>
@@ -332,7 +318,8 @@
                     <textarea name="Message" rows="4" placeholder="Write your message here..." required></textarea>
                 </div>
 
-                <button type="submit">Send Message</button>
+                <button type="submit" id="submit-btn">Send Message</button>
+                <div id="form-response-message">You have submitted successfully!</div>
             </form>
         </div>
 
@@ -342,6 +329,36 @@
     <footer>
         Apex Academy | Copyright © 2026 | All Rights Reserved
     </footer>
+
+    <!-- JavaScript Script connecting form to Google Sheets -->
+    <script>
+        // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE BELOW:
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec";
+
+        const form = document.getElementById('inquiry-form');
+        const responseMsg = document.getElementById('form-response-message');
+        const submitBtn = document.getElementById('submit-btn');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitBtn.innerText = 'Sending...';
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                body: new FormData(form)
+            })
+            .then(response => {
+                submitBtn.innerText = 'Send Message';
+                responseMsg.style.display = 'block';
+                form.reset();
+            })
+            .catch(error => {
+                submitBtn.innerText = 'Send Message';
+                responseMsg.style.display = 'block';
+                form.reset();
+            });
+        });
+    </script>
 
 </body>
 </html>
