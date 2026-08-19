@@ -181,11 +181,9 @@
         }
 
         .required-label::after {
-            content: "(required)";
+            content: " (required)";
             color: #e53e3e;
             font-size: 12px;
-            margin-top: 2px;
-            display: block;
         }
 
         button[type="submit"] {
@@ -332,7 +330,7 @@
 
     <!-- JavaScript Script connecting form to Google Sheets -->
     <script>
-        // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE BELOW:
+        // ⚠️ REPLACE THE URL BELOW WITH YOUR ACTUAL GOOGLE APPS SCRIPT WEB APP URL:
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec";
 
         const form = document.getElementById('inquiry-form');
@@ -342,6 +340,7 @@
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             submitBtn.innerText = 'Sending...';
+            submitBtn.disabled = true;
 
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
@@ -349,11 +348,14 @@
             })
             .then(response => {
                 submitBtn.innerText = 'Send Message';
+                submitBtn.disabled = false;
                 responseMsg.style.display = 'block';
                 form.reset();
             })
             .catch(error => {
+                console.error('Error submitting form:', error);
                 submitBtn.innerText = 'Send Message';
+                submitBtn.disabled = false;
                 responseMsg.style.display = 'block';
                 form.reset();
             });
