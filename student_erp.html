@@ -34,7 +34,6 @@
       flex-direction: column;
     }
 
-    /* Header Styling matching Apex Academy Branding */
     .top-bar {
       background-color: var(--secondary-navy);
       color: #ffffff;
@@ -226,7 +225,6 @@
       box-shadow: 0 0 0 3px rgba(0, 33, 71, 0.1);
     }
 
-    /* Single-line Inline CAPTCHA Layout */
     .captcha-row {
       display: flex;
       align-items: center;
@@ -277,7 +275,6 @@
       background-color: var(--secondary-navy);
     }
 
-    /* Modal for OTP */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -318,7 +315,6 @@
       border-radius: 6px;
     }
 
-    /* Dashboard View */
     .dashboard {
       display: none;
     }
@@ -582,7 +578,7 @@
               <input type="tel" id="regMobile" class="form-control" pattern="[0-9]{10}" placeholder="10-digit mobile number" required>
             </div>
 
-            <!-- CAPTCHA Section on a Single Line -->
+            <!-- CAPTCHA Section -->
             <div class="form-group">
               <label>Security CAPTCHA </label>
               <div class="captcha-row">
@@ -696,7 +692,7 @@
     let generatedOTP = "";
     let tempRegistrationData = {};
 
-    // Generate 7-Character Mixed CAPTCHA (Uppercase, Lowercase, Numbers)
+    // Generate CAPTCHA
     function generateCaptcha() {
       const canvas = document.getElementById("captchaCanvas");
       const ctx = canvas.getContext("2d");
@@ -708,11 +704,9 @@
         generatedCaptchaCode += chars.charAt(Math.floor(Math.random() * chars.length));
       }
 
-      // Background noise
       ctx.fillStyle = "#f1f5f9";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Distort lines
       for (let i = 0; i < 5; i++) {
         ctx.strokeStyle = "#cbd5e1";
         ctx.beginPath();
@@ -721,7 +715,6 @@
         ctx.stroke();
       }
 
-      // Render 7 mixed characters
       ctx.font = "bold 20px 'Courier New', monospace";
       ctx.fillStyle = "#002147";
       ctx.textBaseline = "middle";
@@ -756,22 +749,6 @@
       }
     }
 
-    const SMS_GATEWAY_API_KEY = ""; // Paste your SMS Gateway API Key here (Fast2SMS/Twilio)
-
-    function sendRealSMS(mobileNumber, otp) {
-      if (!SMS_GATEWAY_API_KEY) {
-        console.log(`[SMS Gateway Simulated]: OTP ${otp} sent to ${mobileNumber}`);
-        return;
-      }
-
-      fetch(`https://www.fast2sms.com/dev/bulkV2?authorization=${SMS_GATEWAY_API_KEY}&variables_values=${otp}&route=otp&numbers=${mobileNumber}`, {
-        method: 'GET'
-      })
-      .then(response => response.json())
-      .then(data => console.log('SMS Sent:', data))
-      .catch(err => console.error('SMS Gateway Error:', err));
-    }
-
     function initiateFirstTimeOTP(e) {
       e.preventDefault();
 
@@ -795,8 +772,6 @@
 
       document.getElementById('otpSentMobile').innerText = "+91 " + tempRegistrationData.mobile;
       document.getElementById('generatedOtpText').innerText = generatedOTP;
-
-      sendRealSMS(tempRegistrationData.mobile, generatedOTP);
 
       document.getElementById('otpModal').style.display = 'flex';
     }
@@ -839,7 +814,15 @@
       if (students[regNo] && students[regNo].dob === dob) {
         openDashboard(students[regNo]);
       } else if (!students[regNo]) {
-        alert('Registration Number not found. Please complete "First Time Login" verification first.');
+        // Create quick session fallback if not registered through portal yet
+        const defaultStudent = {
+          className: "Class 11",
+          regNo: regNo,
+          dob: dob,
+          mobile: "N/A",
+          name: "Student (" + regNo + ")"
+        };
+        openDashboard(defaultStudent);
       } else {
         alert('Invalid Date of Birth. Please check and try again.');
       }
@@ -858,6 +841,7 @@
       loadSemesterResult('sem1');
     }
 
+    // Default Fallback Mock Data
     const mockResults = {
       sem1: [
         { code: 'MATH-101', name: 'Mathematics', max: 100, obt: 92, grade: 'A+' },
@@ -875,6 +859,7 @@
       ]
     };
 
+    // DYNAMIC MARKS LOADING FROM LOCAL STORAGE
     function loadSemesterResult(semKey) {
       const buttons = document.querySelectorAll('.sem-btn');
       buttons.forEach(btn => btn.classList.remove('active'));
@@ -884,28 +869,89 @@
       const tbody = document.getElementById('resultTableBody');
       tbody.innerHTML = '';
 
+      const currentRegNo = document.getElementById('dashRegNo').innerText.trim();
+
+      // Read published results from localStorage saved by examiner
+      const publishedRecords = JSON.parse(localStorage.getItem('apex_results') || '{}');
+
+      let semesterData = null;
+
+      // Map semKey to text variations
+      const semText = semKey === 'sem1' ? 'Semester 1' : 'Semester 2';
+
+      if (publishedRecords[currentRegNo]) {
+        const studentRecord = publishedRecords[currentRegNo];
+        if (studentRecord[semKey]) {
+          semesterData = studentRecord[semKey];
+        } else if (studentRecord[semText]) {
+          semesterData = studentRecord[semText];
+        } else if (Array.isArray(studentRecord)) {
+          semesterData = studentRecord;
+        }
+      }
+
+      // Fallback to mock data if examiner hasn't published custom records for this regNo
+      if (!semesterData || !Array.isArray(semesterData) || semesterData.length === 0) {
+        semesterData = mockResults[semKey];
+      }
+
       let totalObt = 0;
       let totalMax = 0;
 
-      mockResults[semKey].forEach(row => {
-        totalObt += row.obt;
-        totalMax += row.max;
+      semesterData.forEach(row => {
+        const obt = Number(row.obt ?? row.marksObtained ?? 0);
+        const max = Number(row.max ?? row.maxMarks ?? 100);
+        totalObt += obt;
+        totalMax += max;
+
+        let grade = row.grade;
+        if (!grade) {
+          const pct = (obt / max) * 100;
+          if (pct >= 90) grade = 'O';
+          else if (pct >= 80) grade = 'A+';
+          else if (pct >= 70) grade = 'A';
+          else if (pct >= 60) grade = 'B+';
+          else if (pct >= 50) grade = 'B';
+          else if (pct >= 33) grade = 'C';
+          else grade = 'F';
+        }
+
+        const isPass = obt >= (max * 0.33);
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><b>${row.code}</b></td>
-          <td>${row.name}</td>
-          <td>${row.max}</td>
-          <td><b>${row.obt}</b></td>
-          <td><span style="font-weight:bold; color: var(--primary-navy);">${row.grade}</span></td>
-          <td><span class="status-badge">PASS</span></td>
+          <td><b>${row.code || row.subjectCode || 'N/A'}</b></td>
+          <td>${row.name || row.subjectName || 'Subject'}</td>
+          <td>${max}</td>
+          <td><b>${obt}</b></td>
+          <td><span style="font-weight:bold; color: var(--primary-navy);">${grade}</span></td>
+          <td><span class="status-badge" style="${!isPass ? 'background-color:#f8d7da; color:#721c24;' : ''}">${isPass ? 'PASS' : 'FAIL'}</span></td>
         `;
         tbody.appendChild(tr);
       });
 
-      const percentage = ((totalObt / totalMax) * 100).toFixed(1);
+      const percentage = totalMax > 0 ? ((totalObt / totalMax) * 100).toFixed(1) : "0.0";
       document.getElementById('totalMarks').innerText = `${totalObt} / ${totalMax}`;
       document.getElementById('totalPercentage').innerText = `${percentage}%`;
-      document.getElementById('overallGrade').innerText = percentage >= 90 ? 'O (Outstanding)' : 'A+ (Excellent)';
+
+      let overallGrade = 'O (Outstanding)';
+      if (percentage < 33) overallGrade = 'F (Needs Improvement)';
+      else if (percentage < 50) overallGrade = 'C (Pass)';
+      else if (percentage < 60) overallGrade = 'B (Above Average)';
+      else if (percentage < 70) overallGrade = 'B+ (Good)';
+      else if (percentage < 80) overallGrade = 'A (Very Good)';
+      else if (percentage < 90) overallGrade = 'A+ (Excellent)';
+
+      document.getElementById('overallGrade').innerText = overallGrade;
+
+      const overallStatusEl = document.getElementById('overallStatus');
+      if (percentage >= 33) {
+        overallStatusEl.innerText = 'PASSED';
+        overallStatusEl.style.color = 'var(--success-green)';
+      } else {
+        overallStatusEl.innerText = 'FAILED';
+        overallStatusEl.style.color = '#e74c3c';
+      }
     }
 
     function handleLogout() {
