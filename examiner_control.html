@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Examination Branch Portal - Itahar Apex Academy</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-navy: #002147;
+      --secondary-navy: #0a2240;
+      --accent-gold: #f39c12;
+      --accent-red: #8b0000;
+      --bg-light: #f4f6f9;
+      --card-bg: #ffffff;
+      --text-main: #2c3e50;
+      --text-muted: #6c757d;
+      --border-color: #dee2e6;
+      --success-green: #27ae60;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--bg-light); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+
+    .top-bar { background-color: var(--secondary-navy); color: #ffffff; font-size: 0.85rem; padding: 6px 5%; text-align: center; }
+    .main-header { background-color: #ffffff; padding: 18px 5%; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+    .header-brand { display: flex; align-items: center; gap: 20px; }
+    .logo-circle { width: 60px; height: 60px; background-color: var(--primary-navy); border: 3px solid var(--accent-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent-gold); font-weight: 800; font-size: 1.4rem; flex-shrink: 0; }
+    .header-titles h1 { color: var(--primary-navy); font-size: 1.6rem; font-weight: 800; text-transform: uppercase; }
+    .header-titles p { color: var(--text-muted); font-size: 0.9rem; font-weight: 500; }
+
+    .navbar { background-color: var(--primary-navy); padding: 12px 5%; color: white; border-top: 3px solid var(--accent-gold); display: flex; justify-content: space-between; align-items: center; }
+    .nav-title { font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; font-size: 0.9rem; }
+
+    .container { flex: 1; max-width: 1100px; width: 90%; margin: 30px auto; }
+    
+    /* Login Box */
+    .login-card { background: var(--card-bg); max-width: 420px; margin: 50px auto; border-radius: 10px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); border: 1px solid var(--border-color); overflow: hidden; }
+    .login-header { background-color: var(--primary-navy); color: white; padding: 20px; text-align: center; }
+    .login-body { padding: 25px; }
+
+    /* Admin Panel */
+    .admin-content { display: none; }
+    .panel-card { background: white; border-radius: 8px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 25px; border-top: 4px solid var(--primary-navy); }
+    .section-title { color: var(--primary-navy); font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; border-bottom: 2px solid var(--bg-light); padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-main); margin-bottom: 6px; }
+    .form-control { width: 100%; padding: 11px 14px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.95rem; outline: none; }
+
+    .grid-row { display: flex; gap: 15px; flex-wrap: wrap; }
+    .grid-col { flex: 1; min-width: 200px; }
+
+    .result-table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 20px; }
+    .result-table th, .result-table td { border: 1px solid var(--border-color); padding: 12px 15px; text-align: left; font-size: 0.9rem; }
+    .result-table th { background-color: #f8fafc; color: var(--primary-navy); font-weight: 700; }
+
+    .btn-submit { width: 100%; padding: 12px; background-color: var(--primary-navy); color: white; border: none; border-radius: 6px; font-weight: 700; font-size: 0.95rem; cursor: pointer; }
+    .btn-submit:hover { background-color: var(--secondary-navy); }
+    .btn-danger { background-color: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; }
+
+    footer { background-color: var(--secondary-navy); color: white; text-align: center; padding: 15px; font-size: 0.85rem; margin-top: auto; }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">Restricted Administrative Portal | Itahar Apex Academy</div>
+
+  <header class="main-header">
+    <div class="header-brand">
+      <div class="logo-circle">EX</div>
+      <div class="header-titles">
+        <h1>EXAMINATION BRANCH PORTAL</h1>
+        <p>Evaluation & Mark Entry Control System</p>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar">
+    <span class="nav-title"><i class="fa-solid fa-user-shield"></i> Examiner Control Panel</span>
+    <span id="sessionStatus" style="font-size: 0.8rem; opacity: 0.8;">Status: Locked</span>
+  </nav>
+
+  <div class="container">
+
+    <div id="loginView" class="login-card">
+      <div class="login-header">
+        <h2><i class="fa-solid fa-lock"></i> Staff Authentication</h2>
+        <p style="font-size: 0.85rem; opacity: 0.8; margin-top: 5px;">Enter security passcode to unlock mark entry</p>
+      </div>
+      <div class="login-body">
+        <form onsubmit="handleAdminLogin(event)">
+          <div class="form-group">
+            <label>Examiner Security PIN / Password</label>
+            <input type="password" id="adminPin" class="form-control" placeholder="Default PIN: admin123" required>
+          </div>
+          <button type="submit" class="btn-submit">Authenticate & Enter Portal</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="adminPanel" class="admin-content">
+      
+      <div class="panel-card">
+        <div class="section-title">
+          <span><i class="fa-solid fa-pen-to-square"></i> Input Marks for Student</span>
+          <button class="btn-danger" onclick="logoutAdmin()"><i class="fa-solid fa-right-from-bracket"></i> Exit Portal</button>
+        </div>
+
+        <form onsubmit="saveStudentMarks(event)">
+          <div class="grid-row">
+            <div class="form-group grid-col">
+              <label>Student Registration Number *</label>
+              <input type="text" id="studentRegNo" class="form-control" placeholder="e.g. 85451542" required>
+            </div>
+            <div class="form-group grid-col">
+              <label>Examination Semester *</label>
+              <select id="examSemester" class="form-control" required>
+                <option value="sem1">Semester 1 (Mid-Term)</option>
+                <option value="sem2">Semester 2 (Annual Final)</option>
+              </select>
+            </div>
+          </div>
+
+          <table class="result-table">
+            <thead>
+              <tr>
+                <th>Subject Code</th>
+                <th>Subject Name</th>
+                <th>Maximum Marks</th>
+                <th>Marks Obtained *</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>MATH-101</td>
+                <td>Mathematics</td>
+                <td>100</td>
+                <td><input type="number" id="sub_math" class="form-control" min="0" max="100" placeholder="0 - 100" required></td>
+              </tr>
+              <tr>
+                <td>PHY-102</td>
+                <td>Physics / Science</td>
+                <td>100</td>
+                <td><input type="number" id="sub_phy" class="form-control" min="0" max="100" placeholder="0 - 100" required></td>
+              </tr>
+              <tr>
+                <td>ENG-103</td>
+                <td>English Language & Lit</td>
+                <td>100</td>
+                <td><input type="number" id="sub_eng" class="form-control" min="0" max="100" placeholder="0 - 100" required></td>
+              </tr>
+              <tr>
+                <td>CHEM-104</td>
+                <td>Chemistry / Env. Science</td>
+                <td>100</td>
+                <td><input type="number" id="sub_chem" class="form-control" min="0" max="100" placeholder="0 - 100" required></td>
+              </tr>
+              <tr>
+                <td>CS-105</td>
+                <td>Computer Applications</td>
+                <td>100</td>
+                <td><input type="number" id="sub_cs" class="form-control" min="0" max="100" placeholder="0 - 100" required></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <button type="submit" class="btn-submit" style="background-color: var(--accent-gold); color: #000;">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Save & Publish Record
+          </button>
+        </form>
+      </div>
+
+      <div class="panel-card">
+        <div class="section-title">
+          <span><i class="fa-solid fa-database"></i> Recently Published Student Records</span>
+        </div>
+        <table class="result-table">
+          <thead>
+            <tr>
+              <th>Registration No</th>
+              <th>Semester</th>
+              <th>Total Marks</th>
+              <th>Percentage</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="publishedRecordsBody">
+            </tbody>
+        </table>
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer>
+    &copy; 2026 ITAHAR APEX ACADEMY | Confidential Administrative System
+  </footer>
+
+  <script>
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const pin = document.getElementById('adminPin').value;
+      if (pin === 'admin123') {
+        document.getElementById('loginView').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'block';
+        document.getElementById('sessionStatus').innerText = 'Status: Authenticated (Staff)';
+        loadPublishedRecords();
+      } else {
+        alert('Invalid PIN! Access Denied.');
+      }
+    }
+
+    function logoutAdmin() {
+      document.getElementById('adminPanel').style.display = 'none';
+      document.getElementById('loginView').style.display = 'block';
+      document.getElementById('sessionStatus').innerText = 'Status: Locked';
+      document.getElementById('adminPin').value = '';
+    }
+
+    function saveStudentMarks(e) {
+      e.preventDefault();
+      const regNo = document.getElementById('studentRegNo').value.trim().toUpperCase();
+      const semester = document.getElementById('examSemester').value;
+
+      const marksData = [
+        { code: 'MATH-101', name: 'Mathematics', max: 100, obt: parseInt(document.getElementById('sub_math').value) },
+        { code: 'PHY-102', name: 'Physics / Science', max: 100, obt: parseInt(document.getElementById('sub_phy').value) },
+        { code: 'ENG-103', name: 'English Language & Lit', max: 100, obt: parseInt(document.getElementById('sub_eng').value) },
+        { code: 'CHEM-104', name: 'Chemistry / Env. Science', max: 100, obt: parseInt(document.getElementById('sub_chem').value) },
+        { code: 'CS-105', name: 'Computer Applications', max: 100, obt: parseInt(document.getElementById('sub_cs').value) }
+      ];
+
+      let allResults = JSON.parse(localStorage.getItem('apex_student_results') || '{}');
+      if (!allResults[regNo]) {
+        allResults[regNo] = {};
+      }
+      allResults[regNo][semester] = marksData;
+
+      localStorage.setItem('apex_student_results', JSON.stringify(allResults));
+      alert(`Marks published successfully for Registration No: ${regNo}`);
+
+      // Clear Form
+      document.getElementById('studentRegNo').value = '';
+      document.getElementById('sub_math').value = '';
+      document.getElementById('sub_phy').value = '';
+      document.getElementById('sub_eng').value = '';
+      document.getElementById('sub_chem').value = '';
+      document.getElementById('sub_cs').value = '';
+
+      loadPublishedRecords();
+    }
+
+    function loadPublishedRecords() {
+      const tbody = document.getElementById('publishedRecordsBody');
+      tbody.innerHTML = '';
+      let allResults = JSON.parse(localStorage.getItem('apex_student_results') || '{}');
+
+      const keys = Object.keys(allResults);
+      if (keys.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color: var(--text-muted);">No student records published yet.</td></tr>';
+        return;
+      }
+
+      keys.forEach(regNo => {
+        Object.keys(allResults[regNo]).forEach(sem => {
+          const subjects = allResults[regNo][sem];
+          let totalObt = subjects.reduce((sum, s) => sum + s.obt, 0);
+          let totalMax = subjects.reduce((sum, s) => sum + s.max, 0);
+          let pct = ((totalObt / totalMax) * 100).toFixed(1);
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><b>${regNo}</b></td>
+            <td>${sem === 'sem1' ? 'Semester 1' : 'Semester 2'}</td>
+            <td>${totalObt} / ${totalMax}</td>
+            <td><b>${pct}%</b></td>
+            <td><button class="btn-danger" onclick="deleteRecord('${regNo}', '${sem}')"><i class="fa-solid fa-trash"></i> Delete</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+    }
+
+    function deleteRecord(regNo, sem) {
+      if (confirm(`Are you sure you want to delete ${sem} marks for ${regNo}?`)) {
+        let allResults = JSON.parse(localStorage.getItem('apex_student_results') || '{}');
+        if (allResults[regNo] && allResults[regNo][sem]) {
+          delete allResults[regNo][sem];
+          if (Object.keys(allResults[regNo]).length === 0) {
+            delete allResults[regNo];
+          }
+          localStorage.setItem('apex_student_results', JSON.stringify(allResults));
+          loadPublishedRecords();
+        }
+      }
+    }
+  </script>
+</body>
+</html>
+</html>
