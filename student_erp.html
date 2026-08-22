@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student ERP Portal - Itahar Apex Academy</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-navy: #002147;
+      --secondary-navy: #0a2240;
+      --accent-gold: #f39c12;
+      --accent-red: #8b0000;
+      --bg-light: #f4f6f9;
+      --card-bg: #ffffff;
+      --text-main: #2c3e50;
+      --text-muted: #6c757d;
+      --border-color: #dee2e6;
+      --success-green: #27ae60;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header Styling matching Apex Academy Branding */
+    .top-bar {
+      background-color: var(--secondary-navy);
+      color: #ffffff;
+      font-size: 0.85rem;
+      padding: 6px 5%;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+
+    .announcement-bar {
+      background-color: var(--accent-red);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      padding: 6px 5%;
+      font-size: 0.9rem;
+      overflow: hidden;
+    }
+
+    .announcement-badge {
+      background-color: var(--accent-gold);
+      color: #000;
+      font-weight: bold;
+      padding: 3px 10px;
+      border-radius: 3px;
+      font-size: 0.75rem;
+      margin-right: 15px;
+      white-space: nowrap;
+    }
+
+    .marquee-text {
+      white-space: nowrap;
+      animation: marquee 22s linear infinite;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .main-header {
+      background-color: #ffffff;
+      padding: 18px 5%;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .logo-circle {
+      width: 65px;
+      height: 65px;
+      background-color: var(--primary-navy);
+      border: 3px solid var(--accent-gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-gold);
+      font-weight: 800;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      flex-shrink: 0;
+    }
+
+    .header-titles h1 {
+      color: var(--primary-navy);
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .header-titles p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .navbar {
+      background-color: var(--primary-navy);
+      display: flex;
+      padding: 0 5%;
+      border-top: 3px solid var(--accent-gold);
+    }
+
+    .nav-item {
+      color: #ffffff;
+      padding: 12px 20px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      transition: background 0.2s;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      background-color: rgba(255, 255, 255, 0.15);
+      color: var(--accent-gold);
+    }
+
+    .container {
+      flex: 1;
+      max-width: 1200px;
+      width: 90%;
+      margin: 30px auto;
+    }
+
+    .auth-card {
+      background: var(--card-bg);
+      max-width: 540px;
+      margin: 20px auto;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+
+    .auth-header {
+      background-color: var(--primary-navy);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .auth-header h2 {
+      font-size: 1.3rem;
+      margin-bottom: 5px;
+    }
+
+    .auth-header p {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+    }
+
+    .tab-buttons {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      background-color: #f8fafc;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      background: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      color: var(--primary-navy);
+      border-bottom: 3px solid var(--primary-navy);
+      background-color: #ffffff;
+    }
+
+    .form-container {
+      padding: 25px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-navy);
+      box-shadow: 0 0 0 3px rgba(0, 33, 71, 0.1);
+    }
+
+    /* Single-line Inline CAPTCHA Layout */
+    .captcha-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .captcha-row #captchaCanvas {
+      background: #e2e8f0;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .captcha-row .btn-refresh-captcha {
+      background: none;
+      border: none;
+      color: var(--primary-navy);
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 4px;
+      flex-shrink: 0;
+      transition: color 0.2s;
+    }
+
+    .captcha-row .btn-refresh-captcha:hover {
+      color: var(--accent-gold);
+    }
+
+    .captcha-row .form-control {
+      flex: 1;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--primary-navy);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-submit:hover {
+      background-color: var(--secondary-navy);
+    }
+
+    /* Modal for OTP */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-box {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .otp-inputs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .otp-field {
+      width: 45px;
+      height: 50px;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: bold;
+      border: 1.5px solid var(--border-color);
+      border-radius: 6px;
+    }
+
+    /* Dashboard View */
+    .dashboard {
+      display: none;
+    }
+
+    .student-profile-card {
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      margin-bottom: 25px;
+      border-top: 4px solid var(--primary-navy);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .profile-info h3 {
+      color: var(--primary-navy);
+      font-size: 1.4rem;
+      margin-bottom: 5px;
+    }
+
+    .profile-details {
+      display: flex;
+      gap: 20px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 5px;
+      flex-wrap: wrap;
+    }
+
+    .profile-details span strong {
+      color: var(--text-main);
+    }
+
+    .btn-logout {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .results-section {
+      background: white;
+      border-radius: 8px;
+      padding: 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .section-title {
+      color: var(--primary-navy);
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--bg-light);
+      padding-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .semester-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+
+    .sem-btn {
+      padding: 8px 16px;
+      background: var(--bg-light);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .sem-btn.active {
+      background: var(--primary-navy);
+      color: white;
+      border-color: var(--primary-navy);
+    }
+
+    .result-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    .result-table th, .result-table td {
+      border: 1px solid var(--border-color);
+      padding: 12px 15px;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    .result-table th {
+      background-color: #f8fafc;
+      color: var(--primary-navy);
+      font-weight: 700;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .summary-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .stat-card {
+      background: #f8fafc;
+      padding: 15px;
+      border-radius: 6px;
+      border-left: 4px solid var(--accent-gold);
+    }
+
+    .stat-card h4 {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .stat-card p {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--primary-navy);
+      margin-top: 5px;
+    }
+
+    footer {
+      background-color: var(--secondary-navy);
+      color: white;
+      text-align: center;
+      padding: 15px;
+      font-size: 0.85rem;
+      margin-top: auto;
+    }
+
+    .alert-banner {
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 10px 15px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    Official Portal of Apex Academy Itahar | CBSE Affiliated Autonomous Center
+  </div>
+
+  <div class="announcement-bar">
+    <span class="announcement-badge">ANNOUNCEMENT</span>
+    <div class="marquee-text">
+      Student ERP Login Active for Session 2026-27 | Semester & Annual Examination Results Uploaded for Classes 5 to 12.
+    </div>
+  </div>
+
+  <header class="main-header">
+    <div class="logo-circle">AA</div>
+    <div class="header-titles">
+      <h1>ITAHAR APEX ACADEMY</h1>
+      <p>Premier Secondary & Senior Secondary Educational Institution</p>
+    </div>
+  </header>
+
+  <nav class="navbar">
+    <a href="#" class="nav-item">Home</a>
+    <a href="#" class="nav-item">Academics</a>
+    <a href="#" class="nav-item">Admissions</a>
+    <a href="#" class="nav-item">Examinations</a>
+    <a href="#" class="nav-item active">Student ERP</a>
+  </nav>
+
+  <div class="container">
+
+    <div id="authView">
+      <div class="auth-card">
+        <div class="auth-header">
+          <h2><i class="fa-solid fa-graduation-cap"></i> Student ERP Portal</h2>
+          <p>Access your academic records & semester results</p>
+        </div>
+
+        <div class="tab-buttons">
+          <button class="tab-btn active" onclick="switchTab('existing')">Existing Student Login</button>
+          <button class="tab-btn" onclick="switchTab('first')">First Time Login (Verify OTP)</button>
+        </div>
+
+        <!-- Existing Student Login Form -->
+        <div id="existingLoginForm" class="form-container">
+          <div class="alert-banner">
+            <i class="fa-solid fa-circle-info"></i> Enter your Registration No. & Date of Birth to access your portal.
+          </div>
+          <form onsubmit="handleExistingLogin(event)">
+            <div class="form-group">
+              <label>Registration Number</label>
+              <input type="text" id="loginRegNo" class="form-control" placeholder="e.g. AA2026-1042" required>
+            </div>
+            <div class="form-group">
+              <label>Date of Birth</label>
+              <input type="date" id="loginDob" class="form-control" required>
+            </div>
+            <button type="submit" class="btn-submit">Login to Dashboard</button>
+          </form>
+        </div>
+
+        <!-- First Time Registration & Login Form -->
+        <div id="firstTimeForm" class="form-container" style="display: none;">
+          <div class="alert-banner">
+            <i class="fa-solid fa-shield-halved"></i> First-time setup requires Captcha & Mobile OTP verification.
+          </div>
+          <form onsubmit="initiateFirstTimeOTP(event)">
+            <div class="form-group">
+              <label>Select Class</label>
+              <select id="regClass" class="form-control" required>
+                <option value="">-- Select Class --</option>
+                <option value="Class 5">Class 5</option>
+                <option value="Class 6">Class 6</option>
+                <option value="Class 7">Class 7</option>
+                <option value="Class 8">Class 8</option>
+                <option value="Class 9">Class 9</option>
+                <option value="Class 10">Class 10</option>
+                <option value="Class 11">Class 11</option>
+                <option value="Class 12">Class 12</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Registration Number</label>
+              <input type="text" id="regNo" class="form-control" placeholder="e.g. AA2026-1042" required>
+            </div>
+            <div class="form-group">
+              <label>Date of Birth</label>
+              <input type="date" id="regDob" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label>Mobile Number (For OTP Verification)</label>
+              <input type="tel" id="regMobile" class="form-control" pattern="[0-9]{10}" placeholder="10-digit mobile number" required>
+            </div>
+
+            <!-- CAPTCHA Section on a Single Line -->
+            <div class="form-group">
+              <label>Security CAPTCHA </label>
+              <div class="captcha-row">
+                <canvas id="captchaCanvas" width="180" height="40" onclick="generateCaptcha()" title="Click to reload"></canvas>
+                <button type="button" class="btn-refresh-captcha" onclick="generateCaptcha()" title="Refresh Captcha">
+                  <i class="fa-solid fa-rotate-right"></i>
+                </button>
+                <input type="text" id="captchaInput" class="form-control" placeholder="Enter CAPTCHA" required autocomplete="off">
+              </div>
+            </div>
+
+            <button type="submit" class="btn-submit">Send Verification OTP</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Student ERP Dashboard View -->
+    <div id="dashboardView" class="dashboard">
+      <div class="student-profile-card">
+        <div class="profile-info">
+          <h3 id="dashName">Student Name</h3>
+          <div class="profile-details">
+            <span>Registration No: <strong id="dashRegNo">--</strong></span>
+            <span>Class: <strong id="dashClass">--</strong></span>
+            <span>DOB: <strong id="dashDob">--</strong></span>
+            <span>Mobile: <strong id="dashMobile">--</strong></span>
+          </div>
+        </div>
+        <button class="btn-logout" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+      </div>
+
+      <div class="results-section">
+        <div class="section-title">
+          <span><i class="fa-solid fa-file-lines"></i> Semester & Examination Results</span>
+          <button onclick="window.print()" style="padding: 6px 12px; font-size:0.8rem; cursor:pointer;"><i class="fa-solid fa-print"></i> Print Statement</button>
+        </div>
+
+        <div class="semester-tabs">
+          <button class="sem-btn active" onclick="loadSemesterResult('sem1')">Semester 1 (Mid-Term)</button>
+          <button class="sem-btn" onclick="loadSemesterResult('sem2')">Semester 2 (Annual Final)</button>
+        </div>
+
+        <table class="result-table">
+          <thead>
+            <tr>
+              <th>Subject Code</th>
+              <th>Subject Name</th>
+              <th>Max Marks</th>
+              <th>Marks Obtained</th>
+              <th>Grade</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="resultTableBody">
+            <!-- Dynamic Marks content -->
+          </tbody>
+        </table>
+
+        <div class="summary-cards">
+          <div class="stat-card">
+            <h4>Total Marks Obtained</h4>
+            <p id="totalMarks">-- / --</p>
+          </div>
+          <div class="stat-card">
+            <h4>Aggregate Percentage</h4>
+            <p id="totalPercentage">-- %</p>
+          </div>
+          <div class="stat-card">
+            <h4>Overall Grade / GPA</h4>
+            <p id="overallGrade">--</p>
+          </div>
+          <div class="stat-card">
+            <h4>Result Status</h4>
+            <p id="overallStatus" style="color: var(--success-green);">PASSED</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- OTP Modal Popup -->
+  <div id="otpModal" class="modal-overlay">
+    <div class="modal-box">
+      <h3 style="color: var(--primary-navy); margin-bottom: 10px;">Mobile Verification</h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted);">An OTP has been dispatched to mobile number: <b id="otpSentMobile"></b></p>
+
+      <div id="otpNotice" style="background: #fef3c7; color: #92400e; padding: 8px; font-size: 0.8rem; margin-top: 10px; border-radius: 4px;">
+        Demo OTP Code: <b id="generatedOtpText">1234</b>
+      </div>
+
+      <form onsubmit="verifyOTPAndRegister(event)">
+        <div class="otp-inputs">
+          <input type="text" id="otp1" class="otp-field" maxlength="1" required pattern="[0-9]" onkeyup="moveFocus(this, 'otp2')">
+          <input type="text" id="otp2" class="otp-field" maxlength="1" required pattern="[0-9]" onkeyup="moveFocus(this, 'otp3')">
+          <input type="text" id="otp3" class="otp-field" maxlength="1" required pattern="[0-9]" onkeyup="moveFocus(this, 'otp4')">
+          <input type="text" id="otp4" class="otp-field" maxlength="1" required pattern="[0-9]">
+        </div>
+        <button type="submit" class="btn-submit">Submit OTP & Activate Account</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2026 ITAHAR APEX ACADEMY | Student ERP Portal. All Rights Reserved.
+  </footer>
+
+  <script>
+    let generatedCaptchaCode = "";
+    let generatedOTP = "";
+    let tempRegistrationData = {};
+
+    // Generate 7-Character Mixed CAPTCHA (Uppercase, Lowercase, Numbers)
+    function generateCaptcha() {
+      const canvas = document.getElementById("captchaCanvas");
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      generatedCaptchaCode = "";
+      for (let i = 0; i < 7; i++) {
+        generatedCaptchaCode += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+
+      // Background noise
+      ctx.fillStyle = "#f1f5f9";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Distort lines
+      for (let i = 0; i < 5; i++) {
+        ctx.strokeStyle = "#cbd5e1";
+        ctx.beginPath();
+        ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+        ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+        ctx.stroke();
+      }
+
+      // Render 7 mixed characters
+      ctx.font = "bold 20px 'Courier New', monospace";
+      ctx.fillStyle = "#002147";
+      ctx.textBaseline = "middle";
+
+      for (let i = 0; i < generatedCaptchaCode.length; i++) {
+        const x = 12 + i * 23;
+        const y = 20 + (Math.random() * 4 - 2);
+        ctx.fillText(generatedCaptchaCode[i], x, y);
+      }
+    }
+
+    window.onload = function() {
+      generateCaptcha();
+    };
+
+    function switchTab(tab) {
+      const existingForm = document.getElementById('existingLoginForm');
+      const firstForm = document.getElementById('firstTimeForm');
+      const tabs = document.querySelectorAll('.tab-btn');
+
+      if (tab === 'existing') {
+        existingForm.style.display = 'block';
+        firstForm.style.display = 'none';
+        tabs[0].classList.add('active');
+        tabs[1].classList.remove('active');
+      } else {
+        existingForm.style.display = 'none';
+        firstForm.style.display = 'block';
+        tabs[1].classList.add('active');
+        tabs[0].classList.remove('active');
+        generateCaptcha();
+      }
+    }
+
+    const SMS_GATEWAY_API_KEY = ""; // Paste your SMS Gateway API Key here (Fast2SMS/Twilio)
+
+    function sendRealSMS(mobileNumber, otp) {
+      if (!SMS_GATEWAY_API_KEY) {
+        console.log(`[SMS Gateway Simulated]: OTP ${otp} sent to ${mobileNumber}`);
+        return;
+      }
+
+      fetch(`https://www.fast2sms.com/dev/bulkV2?authorization=${SMS_GATEWAY_API_KEY}&variables_values=${otp}&route=otp&numbers=${mobileNumber}`, {
+        method: 'GET'
+      })
+      .then(response => response.json())
+      .then(data => console.log('SMS Sent:', data))
+      .catch(err => console.error('SMS Gateway Error:', err));
+    }
+
+    function initiateFirstTimeOTP(e) {
+      e.preventDefault();
+
+      const userCaptcha = document.getElementById('captchaInput').value.trim();
+      if (userCaptcha !== generatedCaptchaCode) {
+        alert("Incorrect CAPTCHA! Please match capital, small letters, and numbers correctly.");
+        generateCaptcha();
+        document.getElementById('captchaInput').value = "";
+        return;
+      }
+
+      generatedOTP = Math.floor(1000 + Math.random() * 9000).toString();
+
+      tempRegistrationData = {
+        className: document.getElementById('regClass').value,
+        regNo: document.getElementById('regNo').value.trim().toUpperCase(),
+        dob: document.getElementById('regDob').value,
+        mobile: document.getElementById('regMobile').value.trim(),
+        name: "Student (" + document.getElementById('regNo').value.trim().toUpperCase() + ")"
+      };
+
+      document.getElementById('otpSentMobile').innerText = "+91 " + tempRegistrationData.mobile;
+      document.getElementById('generatedOtpText').innerText = generatedOTP;
+
+      sendRealSMS(tempRegistrationData.mobile, generatedOTP);
+
+      document.getElementById('otpModal').style.display = 'flex';
+    }
+
+    function moveFocus(current, nextId) {
+      if (current.value.length >= 1) {
+        document.getElementById(nextId).focus();
+      }
+    }
+
+    function verifyOTPAndRegister(e) {
+      e.preventDefault();
+      const enteredOTP = document.getElementById('otp1').value + 
+                         document.getElementById('otp2').value + 
+                         document.getElementById('otp3').value + 
+                         document.getElementById('otp4').value;
+
+      if (enteredOTP !== generatedOTP) {
+        alert("Invalid OTP! Please enter the correct code.");
+        return;
+      }
+
+      let students = JSON.parse(localStorage.getItem('apex_students') || '{}');
+      students[tempRegistrationData.regNo] = tempRegistrationData;
+      localStorage.setItem('apex_students', JSON.stringify(students));
+
+      document.getElementById('otpModal').style.display = 'none';
+      alert('Account activated successfully! Redirecting to your ERP portal...');
+
+      openDashboard(tempRegistrationData);
+    }
+
+    function handleExistingLogin(e) {
+      e.preventDefault();
+      const regNo = document.getElementById('loginRegNo').value.trim().toUpperCase();
+      const dob = document.getElementById('loginDob').value;
+
+      let students = JSON.parse(localStorage.getItem('apex_students') || '{}');
+
+      if (students[regNo] && students[regNo].dob === dob) {
+        openDashboard(students[regNo]);
+      } else if (!students[regNo]) {
+        alert('Registration Number not found. Please complete "First Time Login" verification first.');
+      } else {
+        alert('Invalid Date of Birth. Please check and try again.');
+      }
+    }
+
+    function openDashboard(student) {
+      document.getElementById('authView').style.display = 'none';
+      document.getElementById('dashboardView').style.display = 'block';
+
+      document.getElementById('dashName').innerText = student.name;
+      document.getElementById('dashRegNo').innerText = student.regNo;
+      document.getElementById('dashClass').innerText = student.className;
+      document.getElementById('dashDob').innerText = student.dob;
+      document.getElementById('dashMobile').innerText = student.mobile;
+
+      loadSemesterResult('sem1');
+    }
+
+    const mockResults = {
+      sem1: [
+        { code: 'MATH-101', name: 'Mathematics', max: 100, obt: 92, grade: 'A+' },
+        { code: 'PHY-102', name: 'Physics / Science', max: 100, obt: 88, grade: 'A+' },
+        { code: 'ENG-103', name: 'English Language & Lit', max: 100, obt: 85, grade: 'A' },
+        { code: 'CHEM-104', name: 'Chemistry / Env. Science', max: 100, obt: 90, grade: 'A+' },
+        { code: 'CS-105', name: 'Computer Applications', max: 100, obt: 95, grade: 'O' }
+      ],
+      sem2: [
+        { code: 'MATH-101', name: 'Mathematics', max: 100, obt: 95, grade: 'O' },
+        { code: 'PHY-102', name: 'Physics / Science', max: 100, obt: 91, grade: 'A+' },
+        { code: 'ENG-103', name: 'English Language & Lit', max: 100, obt: 89, grade: 'A+' },
+        { code: 'CHEM-104', name: 'Chemistry / Env. Science', max: 100, obt: 94, grade: 'O' },
+        { code: 'CS-105', name: 'Computer Applications', max: 100, obt: 98, grade: 'O' }
+      ]
+    };
+
+    function loadSemesterResult(semKey) {
+      const buttons = document.querySelectorAll('.sem-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      if (semKey === 'sem1') buttons[0].classList.add('active');
+      else buttons[1].classList.add('active');
+
+      const tbody = document.getElementById('resultTableBody');
+      tbody.innerHTML = '';
+
+      let totalObt = 0;
+      let totalMax = 0;
+
+      mockResults[semKey].forEach(row => {
+        totalObt += row.obt;
+        totalMax += row.max;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><b>${row.code}</b></td>
+          <td>${row.name}</td>
+          <td>${row.max}</td>
+          <td><b>${row.obt}</b></td>
+          <td><span style="font-weight:bold; color: var(--primary-navy);">${row.grade}</span></td>
+          <td><span class="status-badge">PASS</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const percentage = ((totalObt / totalMax) * 100).toFixed(1);
+      document.getElementById('totalMarks').innerText = `${totalObt} / ${totalMax}`;
+      document.getElementById('totalPercentage').innerText = `${percentage}%`;
+      document.getElementById('overallGrade').innerText = percentage >= 90 ? 'O (Outstanding)' : 'A+ (Excellent)';
+    }
+
+    function handleLogout() {
+      document.getElementById('dashboardView').style.display = 'none';
+      document.getElementById('authView').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
